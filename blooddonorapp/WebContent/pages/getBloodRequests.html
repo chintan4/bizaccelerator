@@ -1,0 +1,84 @@
+<html>
+<head>
+<title>Rest POC</title>
+<script>
+	function getBloodRequests() {
+		$.ajax({
+			type : "GET",
+			url : "http://localhost:8888/blooddonorapp/rest/retrieveBloodRequets",
+			dataType : "json",
+			success : function(resp) {
+				// we have the response  
+				//$("#responseDiv").html(JSON.stringify(resp));
+				/* var data = resp;
+
+				for ( var i in data) {
+					alert(data[i]);
+				} */
+				$("#responseDiv").html("success");
+				buildHtmlTable(resp);
+				/* jQuery.each(resp, function(i, val) {
+					  //alert(val.id + ", " + val.bloodGroup + ", " + val.donationDate + ", " + val.place + ", " + val.city + ", " + val.quantity + ", " + val.requestStatus);
+					  drawTable(val);
+				}); */
+			},
+			error : function(e) {
+				alert('Your are screwed: ' + e);
+			}
+		});
+	}
+	
+	window.onload = function() {
+		getBloodRequests();
+	};
+	
+	// Builds the HTML Table out of myList.
+	function buildHtmlTable(resp) {
+	    var columns = addAllColumnHeaders(resp);
+
+	    for (var i = 0 ; i < resp.length ; i++) {
+	        var row$ = $('<tr/>');
+	        for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
+	            var cellValue = resp[i][columns[colIndex]];
+
+	            if (cellValue == null) { cellValue = ""; }
+
+	            row$.append($('<td/>').html(cellValue));
+	        }
+	        $("#excelDataTable").append(row$);
+	    }
+	}
+
+	// Adds a header row to the table and returns the set of columns.
+	// Need to do union of keys from all records as some records may not contain
+	// all records
+	function addAllColumnHeaders(myList)
+	{
+	    var columnSet = [];
+	    var headerTr$ = $('<tr/>');
+
+	    for (var i = 0 ; i < myList.length ; i++) {
+	        var rowHash = myList[i];
+	        for (var key in rowHash) {
+	            if ($.inArray(key, columnSet) == -1){
+	                columnSet.push(key);
+	                headerTr$.append($('<th/>').html(key));
+	            }
+	        }
+	    }
+	    $("#excelDataTable").append(headerTr$);
+
+	    return columnSet;
+	}
+</script>
+</head>
+<body>
+	<script src="../js/jquery-1.11.2.js"></script>
+
+	<div id="responseDiv">Processing...</div>
+
+	<table id="excelDataTable" border="1">
+	</table>
+<br/><br/><br/><br/><a style="align: left;font-size: 14px;" href="/blooddonorapp/pages/welcome.html">Home</a>
+</body>
+</html>

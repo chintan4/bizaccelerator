@@ -1,0 +1,38 @@
+<html>
+<head>
+<title>Rest POC</title>
+<script>
+	function callJSONService() {
+		$.ajax({
+			type : "GET",
+			url : "http://localhost:8888/blooddonorapp/rest/hello",
+			dataType : "json",
+			success : function(data) {
+				// we have the response  
+				//$("#responseDiv").html(JSON.stringify(resp));
+				/* var data = resp;
+
+				for ( var i in data) {
+					alert(data[i]);
+				} 
+				jQuery.each(resp, function(i, val) {
+					  alert(val.value1);
+					  alert(val.value2);
+					});*/
+					alert(data[0].id + "  " + data[0].val1 + "  " + data[0].val2 + "  " + data[0].val3 + "  " + data[0].val4);
+					console.log(data);
+			},
+			error : function(e) {
+				alert('Your are screwed: ' + e);
+			}
+		});
+	}
+</script>
+</head>
+<body>
+	<script src="../js/jquery-1.11.2.js"></script>
+	<button name="click me" value="click" id="click"
+		onclick="callJSONService();">Click</button>
+	<div id="responseDiv"></div>
+</body>
+</html>

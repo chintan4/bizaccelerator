@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>REST with Forms</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="../js/jquery-1.11.2.js"></script>
+<script src="../js/jquery-ui.min.js"></script>
+<link href="../css/jquery-ui.min.css" rel="stylesheet">
+
+<script>
+/* function submitForm() {
+	var fd = new FormData();    
+	fd.append( 'file', input.files[0] );
+	
+	$.ajax({
+	  url: 'http://localhost:8888/blooddonorapp/rest/messages',
+	  data: fd,
+	  processData: false,
+	  contentType: false,
+	  type: 'POST',
+	  success: function(data){
+	    alert(data);
+	  }
+	});
+} */
+	var handle201 = function(data, textStatus, jqXHR) {
+	    $("#responseText").html(data);
+	};
+	
+	jQuery(document).ready(function () { 
+		$( "#submitButton" ).click(function( event ) {
+			 
+		$("#responseText").html("Processing...");
+		// Stop form from submitting normally
+		event.preventDefault();
+		  
+		  
+		 
+		// Get some values from elements on the page:
+		var $form = $("#submitForm"),
+		//term = $form.find( "input[name='s']" ).val(),
+		formData = $form.serialize();
+		 
+		$.ajax(  
+		             {  
+		                       type: 'POST',  
+		                       url: '/blooddonorapp/rest/registration' ,  
+		                       data: formData,  
+		                       success: function(data){},  
+		                       statusCode: {
+		                           201: handle201,
+		                           200: handle201
+		                       }
+		             }  
+		   );
+		});
+	});
+	$(function() {
+	    $( "#datepicker" ).datepicker();
+	});
+</script>
+</head>
+<body>
+<form method="post" id="submitForm" name="submitForm" action="/blooddonorapp/rest/registration">
+<br/><br/>*UserId: <input type="text" name="userId" id="userId" value="" />
+<br/><br/>*First Name: <input type="text" name="firstName" id="firstName" value="" />
+<br/><br/>*Last Name: <input type="text" name="lastName" id="lastName" value="" />
+<br/><br/>*Blood Group: <select name="bloodGroup" id="bloodGroup">
+  <option></option>	
+  <option value="1">A +ve</option>
+  <option value="2">A -ve</option>
+  <option value="3">AB +ve</option>
+  <option value="4">AB -ve</option>
+  <option value="5">B +ve</option>
+  <option value="6">B -ve</option>
+  <option value="7">O +ve</option>
+  <option value="8">O -ve</option>
+</select>
+<br/><br/>*Phone Number: <input type="text" name="phoneNumber" id="phoneNumber" value="" />
+<br/><br/>*E-mail: <input type="text" name="email" id="email" value="" />
+<br/><br/>*Date of Birth: <input type="text" id="datepicker" name="datepicker">
+<br/><br/>*city: <input type="text" name="city" id="city" value="" />
+<br/><br/><input type="button" value="submit" id="submitButton" />
+<div id="responseText"></div>
+</form>
+<br/><br/><br/><br/><a style="align: left;font-size: 14px;" href="/blooddonorapp/pages/welcome.html">Home</a>
+</body>
+</html>
